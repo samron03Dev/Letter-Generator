@@ -64,9 +64,10 @@ textarea {
 }
 
 @media (orientation: portrait) {
-    * {
-        background-color: red !important;
-        color: red;
-        border-color: red !important;
+    #generate-btn {
+        font-size: 3rem;
+    }
+    #word-container {
+        height: 50vw;
     }
 }
