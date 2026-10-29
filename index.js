@@ -4,41 +4,42 @@ const generateLetters = {
         wordContainer: document.getElementById("word-container"),
         numCons: document.getElementById("consNum"),
         numVow: document.getElementById("vowNum"),
-        consonantList: {
-            b: {val: "B", weight: 3},
-            c: {val: "C", weight: 3},
-            d: {val: "D", weight: 6},
-            f: {val: "F", weight: 3},
-            g: {val: "G", weight: 4},
-            h: {val: "H", weight: 5},
-            j: {val: "J", weight: 1},
-            k: {val: "K", weight: 2},
-            l: {val: "L", weight: 5},
-            m: {val: "M", weight: 3},
-            n: {val: "N", weight: 8},
-            p: {val: "P", weight: 3},
-            q: {val: "Qu", weight: 1},
-            r: {val: "R", weight: 9},
-            s: {val: "S", weight: 8},
-            t: {val: "T", weight: 9},
-            v: {val: "V", weight: 2},
-            w: {val: "W", weight: 3},
-            x: {val: "X", weight: 2},
-            y: {val: "Y", weight: 2},
-            z: {val: "Z", weight: 1}
-        }, //List of consonants with different odds for each
-        vowelList: {
-            a: {val: "A", weight: 9},
-            e: {val: "E", weight: 8},
-            i: {val: "I", weight: 5},
-            o: {val: "O", weight: 5},
-            u: {val: "U", weight: 2}
-        }, //List of vowels with different odds for each
+        consonantList: [
+            {val: "B", weight: 3, diff: "EASY"},
+            {val: "C", weight: 3, diff: "EASY"},
+            {val: "D", weight: 6, diff: "EASY"},
+            {val: "F", weight: 3, diff: "MEDIUM"},
+            {val: "G", weight: 4, diff: "EASY"},
+            {val: "H", weight: 5, diff: "EASY"},
+            {val: "J", weight: 1, diff: "HARD"},
+            {val: "K", weight: 2, diff: "MEDIUM"},
+            {val: "L", weight: 5, diff: "EASY"},
+            {val: "M", weight: 3, diff: "EASY"},
+            {val: "N", weight: 8, diff: "EASY"},
+            {val: "P", weight: 3, diff: "MEDIUM"},
+            {val: "Qu", weight: 1, diff: "HARD"},
+            {val: "R", weight: 9, diff: "EASY"},
+            {val: "S", weight: 8, diff: "EASY"},
+            {val: "T", weight: 9, diff: "EASY"},
+            {val: "V", weight: 2, diff: "HARD"},
+            {val: "W", weight: 3, diff: "MEDIUM"},
+            {val: "X", weight: 2, diff: "HARD"},
+            {val: "Y", weight: 2, diff: "MEDIUM"},
+            {val: "Z", weight: 1, diff: "HARD"}
+        ], //List of consonants with different odds for each
+        vowelList: [
+            {val: "A", weight: 9, diff: "EASY"},
+            {val: "E", weight: 8, diff: "EASY"},
+            {val: "I", weight: 5, diff: "MEDIUM"},
+            {val: "O", weight: 5, diff: "MEDIUM"},
+            {val: "U", weight: 2, diff: "MEDIUM"}
+        ], //List of vowels with different odds for each
         chosenStr: ["XXX"] //Used to prevent any repeat word setups
     },
     functions: {
         initFunc: function() {
             generateLetters.data.genBtn.addEventListener('click', this.checkLetterInput);
+            generateLetters.data.wordContainer.addEventListener('click', this.revealLetters);
         },
         checkLetterInput: function() {
             let numCons = generateLetters.data.numCons.value, numVow = generateLetters.data.numVow.value;
@@ -47,12 +48,12 @@ const generateLetters = {
         },
         chooseLetters: function(numCons, numVow) {
             let consonantDeck = [], vowelDeck = [];
-            for (const [val, key] of Object.entries(generateLetters.data.consonantList)) {
+            for (const key of generateLetters.data.consonantList) {
                 for(let i=0;i<key.weight;i++) {
                     consonantDeck.push(key.val);
                 }
             }
-            for (const [val, key] of Object.entries(generateLetters.data.vowelList)) {
+            for (const key of generateLetters.data.vowelList) {
                 for(let i=0;i<key.weight;i++) {
                     vowelDeck.push(key.val);
                 }
@@ -87,9 +88,43 @@ const generateLetters = {
                 let myLetter = document.createElement("div");
                 myLetter.innerHTML = myWord[i];
                 myLetter.classList.add("word-box");
+                if(['A','E','I','O','U'].includes(myWord[i])) {
+                    vowIndex = generateLetters.data.vowelList.findIndex(obj => obj.val === myWord[i]);
+                    console.log(vowIndex);
+                    if(generateLetters.data.vowelList[vowIndex].diff=="EASY") {
+                        myLetter.style.backgroundColor = "lime"
+                        myLetter.style.color = "lime";
+                    }
+                    else {
+                        myLetter.style.backgroundColor = "orange"
+                        myLetter.style.color = "orange";
+                    }
+                }
+                else {
+                    consIndex = generateLetters.data.consonantList.findIndex(obj => obj.val === myWord[i]);
+                    console.log(consIndex);
+                    if(generateLetters.data.consonantList[consIndex].diff=="EASY") {
+                        myLetter.style.backgroundColor = "lime"
+                        myLetter.style.color = "lime";
+                    }
+                    else if(generateLetters.data.consonantList[consIndex].diff=="MEDIUM") {
+                        myLetter.style.backgroundColor = "orange"
+                        myLetter.style.color = "orange";
+                    }
+                    else {
+                        myLetter.style.backgroundColor = "red"
+                        myLetter.style.color = "red";
+                    }
+                }
                 wordContainer.append(myLetter);
             }
             console.log(wordContainer);
+        },
+        revealLetters: function() {
+            for (const child of generateLetters.data.wordContainer.children) {
+                child.style.backgroundColor = "white";
+                child.style.color = "black";
+            }
         }
     }
 }
