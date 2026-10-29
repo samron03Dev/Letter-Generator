@@ -35,6 +35,7 @@ body {
     align-items: center;
     flex-wrap: wrap;
     border: 5px solid black;
+    cursor: pointer;
 }
 
 .word-box {
@@ -52,6 +53,15 @@ body {
 #generate-btn {
     cursor: pointer;
     font-size: 5rem;
+    padding: 0.5rem;
+    border: 5px solid black;
+    transition: background-color 500ms ease;
+    transition: color 500ms ease;
+}
+
+#generate-btn:active {
+    background-color: black;
+    color: white;
 }
 
 textarea {
